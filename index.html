@@ -606,6 +606,134 @@ table.mini-gantt td:first-child{
   .gantt-caption{grid-template-columns:1fr}
 }
 
+
+.progress-summary{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:18px;
+  align-items:stretch;
+  margin:18px 0 22px;
+}
+.progress-total{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:20px;
+  background:linear-gradient(180deg,#fff,#FCF8F6);
+  position:relative;
+  overflow:hidden;
+}
+.progress-total:before{
+  content:"";
+  position:absolute;left:0;right:0;top:0;height:5px;background:var(--grad);
+}
+.progress-total .eyebrow{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:800;
+  color:#7A706A;
+}
+.progress-total .value{
+  font-size:44px;
+  line-height:1;
+  font-weight:800;
+  color:var(--wine);
+  margin:10px 0 8px;
+}
+.progress-total .small{
+  font-size:12px;
+  color:#6F6864;
+}
+.progress-list{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.progress-item{
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fff;
+  padding:12px 14px;
+  display:grid;
+  grid-template-columns:minmax(240px,1.3fr) minmax(220px,2fr) 90px 120px;
+  gap:12px;
+  align-items:center;
+}
+.progress-item .name{
+  font-weight:700;
+  color:#3E3134;
+}
+.progress-track{
+  height:12px;
+  background:#EFE9E6;
+  border-radius:999px;
+  overflow:hidden;
+  position:relative;
+}
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:var(--grad);
+  border-radius:999px;
+  transition:width .25s ease;
+}
+.progress-input-wrap{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  justify-content:flex-end;
+}
+.progress-input{
+  width:62px;
+  padding:7px 6px;
+  border:1px solid #D9D0CB;
+  border-radius:7px;
+  text-align:right;
+  font-weight:700;
+  color:var(--wine);
+  background:#fff;
+}
+.progress-status{
+  display:inline-flex;
+  justify-content:center;
+  padding:6px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  border:1px solid var(--line);
+  background:#F7F5F3;
+  color:#6E6762;
+  white-space:nowrap;
+}
+.progress-status.running{
+  background:#FFF6E8;
+  color:#7B4A0B;
+  border-color:#E9C99A;
+}
+.progress-status.done{
+  background:#EEF7F0;
+  color:#2F6A3B;
+  border-color:#CDE1D1;
+}
+.gantt-progress{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-left:8px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#F6ECEF;
+  color:var(--wine);
+  border:1px solid #E6CDD4;
+  font-size:10px;
+  font-weight:800;
+}
+@media(max-width:980px){
+  .progress-summary{grid-template-columns:1fr}
+  .progress-item{grid-template-columns:1fr}
+  .progress-input-wrap{justify-content:flex-start}
+}
+
 </style>
 </head>
 <body>
@@ -620,6 +748,7 @@ table.mini-gantt td:first-child{
     </div>
     <nav class="navlinks">
       <a href="#resumen">Resumen</a>
+      <a href="#progreso">Progreso</a>
       <a href="#gantt">Gantt</a>
       <a href="#gate">Ready for Migration</a>
       <a href="#app1">Aplicación 01</a>
@@ -666,34 +795,98 @@ table.mini-gantt td:first-child{
 </section>
 
 
+
+
+<section id="progreso">
+  <div class="section-title">
+    <div>
+      <h2>2. Progreso de migraciones identificadas</h2>
+      <p>Seguimiento operativo de las <b>5 aplicaciones actualmente identificadas</b>. Cada migración tiene el mismo peso dentro del avance consolidado (20%). Las aplicaciones 6, 7 y 8 no participan en este cálculo hasta ser identificadas.</p>
+    </div>
+    <span class="tag">Seguimiento editable</span>
+  </div>
+
+  <div class="progress-summary">
+    <div class="progress-total">
+      <div class="eyebrow">Avance total · 5 aplicaciones</div>
+      <div class="value" id="totalProgressValue">0%</div>
+      <div class="progress-track" style="height:14px;margin:12px 0 10px">
+        <div class="progress-fill" id="totalProgressFill"></div>
+      </div>
+      <div class="small" id="progressCounts">0 finalizadas · 0 en ejecución · 5 no iniciadas</div>
+    </div>
+
+    <div class="progress-list">
+      <div class="progress-item">
+        <div class="name">Página Web Fiduprevisora</div>
+        <div class="progress-track"><div class="progress-fill" id="fill-app1"></div></div>
+        <div class="progress-input-wrap"><input class="progress-input" id="progress-app1" type="number" min="0" max="100" step="5" value="0"><span>%</span></div>
+        <div class="progress-status" id="status-app1">No iniciada</div>
+      </div>
+
+      <div class="progress-item">
+        <div class="name">Página Web FOMAG 1</div>
+        <div class="progress-track"><div class="progress-fill" id="fill-app2"></div></div>
+        <div class="progress-input-wrap"><input class="progress-input" id="progress-app2" type="number" min="0" max="100" step="5" value="0"><span>%</span></div>
+        <div class="progress-status" id="status-app2">No iniciada</div>
+      </div>
+
+      <div class="progress-item">
+        <div class="name">Fondo de Riesgos Laborales</div>
+        <div class="progress-track"><div class="progress-fill" id="fill-app3"></div></div>
+        <div class="progress-input-wrap"><input class="progress-input" id="progress-app3" type="number" min="0" max="100" step="5" value="0"><span>%</span></div>
+        <div class="progress-status" id="status-app3">No iniciada</div>
+      </div>
+
+      <div class="progress-item">
+        <div class="name">Obras por Impuestos</div>
+        <div class="progress-track"><div class="progress-fill" id="fill-app4"></div></div>
+        <div class="progress-input-wrap"><input class="progress-input" id="progress-app4" type="number" min="0" max="100" step="5" value="0"><span>%</span></div>
+        <div class="progress-status" id="status-app4">No iniciada</div>
+      </div>
+
+      <div class="progress-item">
+        <div class="name">Portal FIC · Fondos de Inversión Colectiva</div>
+        <div class="progress-track"><div class="progress-fill" id="fill-app5"></div></div>
+        <div class="progress-input-wrap"><input class="progress-input" id="progress-app5" type="number" min="0" max="100" step="5" value="0"><span>%</span></div>
+        <div class="progress-status" id="status-app5">No iniciada</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Criterio de cálculo:</b> Avance total = promedio simple del progreso de las 5 migraciones identificadas. Por ahora no se calcula SPI ni Valor Ganado; este bloque busca establecer primero una disciplina simple de actualización de avance.
+  </div>
+</section>
+
 <section id="gantt">
   <div class="section-title">
     <div>
-      <h2>2. Gantt maestro de migración</h2>
-      <p>El <b>plan formal de migración inicia el 01 de octubre de 2026 y finaliza el 23 de diciembre de 2026</b>. Como actividad previa, entre el <b>24 y el 30 de septiembre</b> se ejecutarán en paralelo F0, F1, el assessment de las 8 aplicaciones y la priorización / definición de olas.</p>
+      <h2>3. Gantt maestro de migración</h2>
+      <p>El <b>plan formal de migración inicia el 01 de octubre de 2026 y finaliza el 23 de diciembre de 2026</b>. Como actividad previa, entre el <b>24 y el 30 de septiembre</b> se ejecutarán F0, F1, el assessment de las 8 aplicaciones y la priorización / definición de la secuencia.</p>
     </div>
     <span class="tag">01 Oct – 23 Dic 2026</span>
   </div>
 
   <div class="note" style="margin-top:0;margin-bottom:18px">
-    <b>Modelo de ejecución:</b> las migraciones se realizarán en paralelo por ola: <b>3 aplicaciones en octubre</b>, <b>3 aplicaciones en noviembre</b> y <b>2 aplicaciones en diciembre</b>. Cada aplicación conserva su esfuerzo técnico individual estimado; la barra del Gantt representa la ventana de ejecución y coordinación de la ola, no horas continuas durante todo el periodo.
+    <b>Modelo de ejecución actualizado:</b> se realizará <b>una migración por semana</b>, evitando migraciones en paralelo. Se mantiene la distribución objetivo de <b>3 aplicaciones en octubre</b>, <b>3 en noviembre</b> y <b>2 en diciembre</b>. Las semanas libres entre bloques se reservan para estabilización, contingencias y preparación de la siguiente migración.
   </div>
 
   <div class="gantt-wrap">
     <div class="gantt-plan">
-      <div class="head">Actividad / Frente</div>
+      <div class="head">Actividad / Aplicación</div>
       <div class="head pre">24–30 Sep<br>Pre-plan</div>
-      <div class="head">01–09 Oct</div>
-      <div class="head">12–16 Oct</div>
-      <div class="head">19–23 Oct</div>
-      <div class="head">26–30 Oct</div>
+      <div class="head">01–07 Oct</div>
+      <div class="head">08–14 Oct</div>
+      <div class="head">15–21 Oct</div>
+      <div class="head">22–30 Oct</div>
       <div class="head">02–06 Nov</div>
       <div class="head">09–13 Nov</div>
       <div class="head">16–20 Nov</div>
       <div class="head">23–30 Nov</div>
       <div class="head">01–07 Dic</div>
-      <div class="head">09–11 Dic</div>
-      <div class="head">14–18 Dic</div>
+      <div class="head">09–15 Dic</div>
+      <div class="head">16–18 Dic</div>
       <div class="head">21–23 Dic</div>
 
       <div class="activity">F0 · Alistamiento</div>
@@ -714,85 +907,94 @@ table.mini-gantt td:first-child{
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Priorización + definición de olas</div>
+      <div class="activity">Priorización + secuencia</div>
       <div class="cell precell"><div class="wavebar prep">24–30 Sep</div></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Operación + gobierno de migración</div>
+      <div class="activity">1 · Página Web Fiduprevisora <span class="gantt-progress" id="gantt-progress-app1">0%</span></div>
       <div class="cell precell"></div>
-      <div class="cell"><div class="wavebar run">Inicio</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
-      <div class="cell"><div class="wavebar run">Estabilización</div></div>
+      <div class="cell"><div class="wavebar oct">Migración 1</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">2 · Página Web FOMAG 1 <span class="gantt-progress" id="gantt-progress-app2">0%</span></div>
+      <div class="cell precell"></div>
       <div class="cell"></div>
+      <div class="cell"><div class="wavebar oct">Migración 2</div></div>
+      <div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Ola Octubre · Aplicación 1</div>
+      <div class="activity">3 · Fondo de Riesgos Laborales <span class="gantt-progress" id="gantt-progress-app3">0%</span></div>
       <div class="cell precell"></div>
-      <div class="cell"><div class="wavebar oct">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar oct">Migración 3</div></div>
+      <div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Estabilización + contingencia Octubre</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar run">Buffer</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">4 · Obras por Impuestos <span class="gantt-progress" id="gantt-progress-app4">0%</span></div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar nov">Migración 4</div></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Ola Octubre · Aplicación 2</div>
-      <div class="cell precell"></div>
-      <div class="cell"><div class="wavebar oct">36 h</div></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-
-      <div class="activity">Ola Octubre · Aplicación 3</div>
-      <div class="cell precell"></div>
-      <div class="cell"><div class="wavebar oct">36 h</div></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-
-      <div class="activity">Ola Noviembre · Aplicación 4</div>
+      <div class="activity">5 · Portal FIC · Fondos de Inversión Colectiva <span class="gantt-progress" id="gantt-progress-app5">0%</span></div>
       <div class="cell precell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       <div class="cell"></div>
-      <div class="cell"><div class="wavebar nov">36 h</div></div>
+      <div class="cell"><div class="wavebar nov">Migración 5</div></div>
       <div class="cell"></div><div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Ola Noviembre · Aplicación 5</div>
+      <div class="activity">6 · Aplicación por definir</div>
       <div class="cell precell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"><div class="wavebar nov">36 h</div></div>
       <div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar nov">Migración 6</div></div>
+      <div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Ola Noviembre · Aplicación 6</div>
+      <div class="activity">Estabilización + contingencia Noviembre</div>
       <div class="cell precell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"><div class="wavebar nov">36 h</div></div>
-      <div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar run">Buffer</div></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Ola Diciembre · Aplicación 7</div>
+      <div class="activity">7 · Aplicación por definir</div>
       <div class="cell precell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"><div class="wavebar dec">36 h</div></div>
+      <div class="cell"><div class="wavebar dec">Migración 7</div></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
-      <div class="activity">Ola Diciembre · Aplicación 8</div>
+      <div class="activity">8 · Aplicación por definir</div>
       <div class="cell precell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-      <div class="cell"><div class="wavebar dec">36 h</div></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="wavebar dec">Migración 8</div></div>
+      <div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Estabilización final + consolidación</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar run">16–18 Dic</div></div>
+      <div class="cell"></div>
 
       <div class="activity">Transferencia + cierre</div>
       <div class="cell precell"></div>
@@ -804,17 +1006,18 @@ table.mini-gantt td:first-child{
   </div>
 
   <div class="gantt-caption">
-    <div class="cap"><b>Preparación previa:</b> 24–30 de septiembre. F0, F1, assessment de las 8 aplicaciones y priorización se ejecutan en paralelo antes del inicio formal.</div>
-    <div class="cap"><b>Olas paralelas:</b> 3 aplicaciones en octubre, 3 en noviembre y 2 en diciembre. Cada aplicación mantiene su plan técnico individual.</div>
-    <div class="cap"><b>Cierre:</b> 21–23 de diciembre. Se reservan exclusivamente los últimos 3 días hábiles para transferencia y cierre del plan.</div>
+    <div class="cap"><b>Preparación previa:</b> 24–30 de septiembre. F0, F1, assessment de las 8 aplicaciones y priorización se completan antes del arranque formal.</div>
+    <div class="cap"><b>Migración secuencial:</b> una aplicación por semana. No se programan dos migraciones en paralelo.</div>
+    <div class="cap"><b>Cierre:</b> 21–23 de diciembre. Se reservan exclusivamente los últimos 3 días hábiles para transferencia y cierre.</div>
   </div>
 </section>
+
 
 
 <section>
   <div class="section-title">
     <div>
-      <h2>3. Modelo de ejecución por aplicación</h2>
+      <h2>4. Modelo de ejecución por aplicación</h2>
       <p>Cada aplicación debe recorrer el mismo ciclo de control antes de considerarse migrada y aceptada.</p>
     </div>
   </div>
@@ -834,7 +1037,7 @@ table.mini-gantt td:first-child{
 <section id="gate">
   <div class="section-title">
     <div>
-      <h2>4. Gate “Ready for Migration”</h2>
+      <h2>5. Gate “Ready for Migration”</h2>
       <p>El objetivo es evitar que el esfuerzo técnico se consuma mientras existen dependencias o accesos pendientes.</p>
     </div>
     <span class="tag">Entrada obligatoria</span>
@@ -862,8 +1065,8 @@ table.mini-gantt td:first-child{
 <section id="app1">
   <div class="section-title">
     <div>
-      <h2>5. Aplicación 01 · Sitio WordPress</h2>
-      <p>Esfuerzo técnico propuesto: <b>36 horas efectivas / 4,5 días laborables</b>. La redistribución prioriza QA, salida a producción y estabilización, manteniendo una bolsa máxima para remediaciones de compatibilidad PHP.</p>
+      <h2>6. Aplicación 01 · Página Web Fiduprevisora</h2>
+      <p>Esfuerzo técnico de referencia para la primera migración: <b>36 horas efectivas / 4,5 días laborables</b>. La ejecución se reserva dentro de una ventana semanal completa para permitir coordinación, validación, paso a producción y estabilización.</p>
     </div>
     <span class="tag">36 horas</span>
   </div>
@@ -917,7 +1120,7 @@ table.mini-gantt td:first-child{
 <section id="inventario">
   <div class="section-title">
     <div>
-      <h2>6. Matriz maestra de las 8 aplicaciones</h2>
+      <h2>7. Matriz maestra de las 8 aplicaciones</h2>
       <p>La matriz se completa con Fiduprevisora durante el assessment. No se asignan nombres, complejidades ni esfuerzos sin validación.</p>
     </div>
     <span class="tag">Control de alcance</span>
@@ -931,24 +1134,24 @@ table.mini-gantt td:first-child{
         </tr>
       </thead>
       <tbody>
-        <tr><td>1</td><td><b>Sitio WordPress*</b></td><td>WordPress / PHP / MySQL</td><td>Por definir</td><td>BD / Plugins / PVC / DNS / certificados</td><td>Por validar</td><td><b>36 h máx. plan.</b></td><td>Por definir</td><td>Por definir</td><td><span class="state">Assessment</span></td></tr>
-        <tr><td>2</td><td>Aplicación 2</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
-        <tr><td>3</td><td>Aplicación 3</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
-        <tr><td>4</td><td>Aplicación 4</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
-        <tr><td>5</td><td>Aplicación 5</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
-        <tr><td>6</td><td>Aplicación 6</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
-        <tr><td>7</td><td>Aplicación 7</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
-        <tr><td>8</td><td>Aplicación 8</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
-      </tbody>
+        <tr><td>1</td><td><b>Página Web Fiduprevisora</b></td><td>Por confirmar</td><td>Por definir</td><td>Por levantar en assessment</td><td>Por validar</td><td><b>36 h ref.</b></td><td>01–07 Oct</td><td>Por definir</td><td><span class="state">Assessment</span></td></tr>
+        <tr><td>2</td><td><b>Página Web FOMAG 1</b></td><td>Por confirmar</td><td>Por definir</td><td>Por levantar en assessment</td><td>Por validar</td><td>Por confirmar</td><td>08–14 Oct</td><td>Por definir</td><td><span class="state">Assessment</span></td></tr>
+        <tr><td>3</td><td><b>Fondo de Riesgos Laborales</b></td><td>Por confirmar</td><td>Por definir</td><td>Por levantar en assessment</td><td>Por validar</td><td>Por confirmar</td><td>15–21 Oct</td><td>Por definir</td><td><span class="state">Assessment</span></td></tr>
+        <tr><td>4</td><td><b>Obras por Impuestos</b></td><td>Por confirmar</td><td>Por definir</td><td>Por levantar en assessment</td><td>Por validar</td><td>Por confirmar</td><td>02–06 Nov</td><td>Por definir</td><td><span class="state">Assessment</span></td></tr>
+        <tr><td>5</td><td><b>Portal FIC · Fondos de Inversión Colectiva</b></td><td>Por confirmar</td><td>Por definir</td><td>Por levantar en assessment</td><td>Por validar</td><td>Por confirmar</td><td>09–13 Nov</td><td>Por definir</td><td><span class="state">Assessment</span></td></tr>
+        <tr><td>6</td><td><b>Aplicación por definir</b></td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Por confirmar</td><td>16–20 Nov</td><td>Por definir</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>7</td><td><b>Aplicación por definir</b></td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Por confirmar</td><td>01–07 Dic</td><td>Por definir</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>8</td><td><b>Aplicación por definir</b></td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Por confirmar</td><td>09–15 Dic</td><td>Por definir</td><td><span class="state">Inventario</span></td></tr>
+</tbody>
     </table>
   </div>
-  <div class="note">* El sitio WordPress se presenta como <b>candidato</b> para la primera migración porque ya existe una estimación técnica. La conformación de la Ola 1 debe confirmarse con Fiduprevisora.</div>
+  <div class="note">* Se incorporan los cinco nombres de aplicaciones suministrados para el plan. Las aplicaciones 6, 7 y 8 permanecen pendientes de identificación. Las tecnologías, dependencias, complejidad y esfuerzo de cada aplicación se confirmarán durante el assessment.</div>
 </section>
 
 <section>
   <div class="section-title">
     <div>
-      <h2>7. Acuerdos requeridos con Fiduprevisora</h2>
+      <h2>8. Acuerdos requeridos con Fiduprevisora</h2>
       <p>Decisiones necesarias para convertir este plan maestro en un cronograma comprometido.</p>
     </div>
   </div>
@@ -977,5 +1180,71 @@ table.mini-gantt td:first-child{
   </div>
   <div class="footer-strip"></div>
 </footer>
+
+<script>
+(function(){
+  const ids = ['app1','app2','app3','app4','app5'];
+
+  function clamp(v){
+    v = Number(v);
+    if (Number.isNaN(v)) return 0;
+    return Math.max(0, Math.min(100, v));
+  }
+
+  function stateFor(v){
+    if(v <= 0) return {label:'No iniciada', cls:''};
+    if(v >= 100) return {label:'Finalizada', cls:'done'};
+    return {label:'En ejecución', cls:'running'};
+  }
+
+  function update(){
+    let values = [];
+    let done = 0, running = 0, notStarted = 0;
+
+    ids.forEach(id => {
+      const input = document.getElementById('progress-' + id);
+      let v = clamp(input.value);
+      input.value = v;
+
+      const fill = document.getElementById('fill-' + id);
+      const status = document.getElementById('status-' + id);
+      const gantt = document.getElementById('gantt-progress-' + id);
+
+      fill.style.width = v + '%';
+      gantt.textContent = Math.round(v) + '%';
+
+      const state = stateFor(v);
+      status.textContent = state.label;
+      status.className = 'progress-status' + (state.cls ? ' ' + state.cls : '');
+
+      if(v === 0) notStarted++;
+      else if(v === 100) done++;
+      else running++;
+
+      values.push(v);
+      try { localStorage.setItem('fidu-progress-' + id, String(v)); } catch(e) {}
+    });
+
+    const avg = values.reduce((a,b)=>a+b,0) / values.length;
+    document.getElementById('totalProgressValue').textContent = avg.toFixed(1).replace('.0','') + '%';
+    document.getElementById('totalProgressFill').style.width = avg + '%';
+    document.getElementById('progressCounts').textContent =
+      done + ' finalizadas · ' + running + ' en ejecución · ' + notStarted + ' no iniciadas';
+  }
+
+  ids.forEach(id => {
+    const input = document.getElementById('progress-' + id);
+    try {
+      const saved = localStorage.getItem('fidu-progress-' + id);
+      if(saved !== null) input.value = clamp(saved);
+    } catch(e) {}
+    input.addEventListener('input', update);
+    input.addEventListener('change', update);
+  });
+
+  update();
+})();
+</script>
+
 </body>
 </html>
