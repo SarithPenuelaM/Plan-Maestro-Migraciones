@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Plan Maestro de Migración OpenShift | Fiduprevisora</title>
+<style>
+:root{
+  --wine:#8D1F3D;
+  --wine-dark:#6F1732;
+  --brick:#B23A27;
+  --burnt:#CE5723;
+  --orange:#E88422;
+  --gold:#B38B3A;
+  --black:#161616;
+  --ink:#242424;
+  --muted:#666666;
+  --paper:#FFFFFF;
+  --soft:#F7F5F3;
+  --soft2:#FBFAF9;
+  --line:#E7E0DC;
+  --shadow:0 12px 34px rgba(72,30,34,.09);
+  --grad:linear-gradient(90deg,var(--wine) 0%, var(--brick) 40%, var(--burnt) 70%, var(--orange) 100%);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--ink);
+  background:#F3F1EF;
+  line-height:1.45;
+}
+.brand-strip{
+  height:8px;
+  background:var(--grad);
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(10px);
+}
+.nav{
+  max-width:1320px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 24px;
+  gap:24px;
+}
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+.fidu-logo{
+  font-family:Georgia, "Times New Roman", serif;
+  color:var(--wine);
+  font-size:28px;
+  letter-spacing:-.6px;
+  line-height:1;
+  white-space:nowrap;
+}
+.divider{
+  width:1px;height:30px;background:#CFC7C2;
+}
+.partner{
+  color:#444;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+}
+.navlinks{
+  display:flex;flex-wrap:wrap;gap:4px;
+}
+.navlinks a{
+  color:#3F3F3F;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:700;
+  padding:8px 10px;
+  border-radius:7px;
+}
+.navlinks a:hover{background:#F5EFEC;color:var(--wine)}
+.hero{
+  background:var(--paper);
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  width:230px;height:170px;
+  right:48px;top:30px;
+  opacity:.28;
+  background-image:radial-gradient(circle,#BDB5B0 3px,transparent 3.6px);
+  background-size:22px 22px;
+}
+.hero-inner{
+  max-width:1320px;
+  margin:auto;
+  padding:58px 24px 50px;
+  display:grid;
+  grid-template-columns:1.35fr .65fr;
+  gap:42px;
+  align-items:center;
+  position:relative;
+  z-index:1;
+}
+.kicker{
+  color:var(--wine);
+  font-weight:800;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+}
+.kicker:before{
+  content:"";
+  width:28px;height:3px;background:var(--orange);border-radius:5px;
+}
+h1{
+  margin:13px 0 14px;
+  font-size:46px;
+  line-height:1.06;
+  color:#151515;
+  max-width:880px;
+}
+.hero p{
+  font-size:18px;
+  color:#555;
+  max-width:880px;
+  margin:0;
+}
+.hero-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero-card:before{
+  content:"";
+  position:absolute;left:0;right:0;top:0;height:6px;background:var(--grad);
+}
+.label{
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#79706B;
+}
+.big{
+  font-size:40px;
+  color:var(--wine);
+  font-weight:800;
+  line-height:1.05;
+  margin-top:6px;
+}
+.hero-card hr{
+  border:none;
+  border-top:1px solid var(--line);
+  margin:19px 0;
+}
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:8px;
+  font-size:12px;
+  font-weight:700;
+  padding:7px 10px;
+  border:1px solid #E9C99A;
+  border-radius:999px;
+  color:#7B4A0B;
+  background:#FFF6E8;
+}
+.status-pill:before{
+  content:"";
+  width:8px;height:8px;border-radius:50%;background:var(--orange);
+}
+main{
+  max-width:1320px;
+  margin:auto;
+  padding:28px 24px 72px;
+}
+section{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:28px;
+  margin:22px 0;
+  box-shadow:var(--shadow);
+}
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:18px;
+  align-items:flex-start;
+}
+.section-title h2{
+  margin:0;
+  color:#1B1B1B;
+  font-size:27px;
+}
+.section-title h2:after{
+  content:"";
+  display:block;
+  width:58px;height:4px;
+  margin-top:9px;
+  border-radius:4px;
+  background:var(--grad);
+}
+.section-title p{
+  margin:10px 0 0;
+  color:var(--muted);
+  max-width:900px;
+}
+.tag{
+  white-space:nowrap;
+  color:var(--wine);
+  background:#FAF0F3;
+  border:1px solid #E8CBD4;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:800;
+  border-radius:999px;
+}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.card{
+  background:linear-gradient(180deg,#fff,#FCFAF9);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
+  min-height:110px;
+}
+.card strong{
+  display:block;
+  color:var(--wine);
+  font-size:24px;
+  margin-bottom:5px;
+}
+.card span{color:#666;font-size:13px}
+.note{
+  margin-top:18px;
+  padding:14px 16px;
+  background:#FBF5F2;
+  border-left:4px solid var(--orange);
+  border-radius:0 8px 8px 0;
+  color:#4D4540;
+}
+.gantt-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+.gantt{
+  min-width:1080px;
+  display:grid;
+  grid-template-columns:270px repeat(12,minmax(64px,1fr));
+  font-size:12px;
+}
+.gantt>div{
+  min-height:46px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.gantt .head{
+  background:var(--wine);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  padding:8px;
+}
+.gantt .head:first-child{justify-content:flex-start;padding-left:13px}
+.gantt .activity{
+  background:#FBF8F6;
+  color:#3F3234;
+  font-weight:700;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+}
+.gantt .cell{background:#fff}
+.bar{
+  height:22px;
+  margin:11px 4px;
+  border-radius:5px;
+  background:linear-gradient(90deg,var(--wine),var(--brick));
+  color:white;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  padding:0 8px;
+  white-space:nowrap;
+  box-shadow:0 3px 7px rgba(141,31,61,.17);
+}
+.bar.orange{background:linear-gradient(90deg,var(--burnt),var(--orange))}
+.bar.soft{
+  background:#F1DFD2;
+  color:#74331E;
+  border:1px solid #E8C2AA;
+  box-shadow:none;
+}
+.bar.dashed{
+  background:repeating-linear-gradient(
+    135deg,#FFF8F0,#FFF8F0 8px,#F9E8D4 8px,#F9E8D4 16px
+  );
+  color:#874717;
+  border:1px dashed var(--orange);
+  box-shadow:none;
+}
+.legend{
+  display:flex;gap:18px;flex-wrap:wrap;
+  margin-top:12px;color:#6F6864;font-size:12px;
+}
+.legend i{
+  width:18px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px;
+}
+.l1{background:var(--wine)}
+.l2{background:var(--orange)}
+.l3{background:#FFF8F0;border:1px dashed var(--orange)}
+.flow{
+  display:grid;
+  grid-template-columns:repeat(9,1fr);
+  gap:8px;
+}
+.step{
+  position:relative;
+  min-height:85px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#FCFAF9;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:12px 10px;
+  text-align:center;
+}
+.step b{color:var(--wine);font-size:13px}
+.step span{font-size:11px;color:#777;margin-top:4px}
+.step:after{
+  content:"›";
+  position:absolute;
+  right:-10px;
+  top:27px;
+  font-size:25px;
+  font-weight:800;
+  color:var(--orange);
+  z-index:2;
+}
+.step:last-child:after{display:none}
+.checklist{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px 14px;
+}
+.check{
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#FFFEFD;
+  padding:10px 11px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:13px;
+}
+.box{
+  width:16px;height:16px;
+  border:2px solid var(--wine);
+  border-radius:3px;
+  flex:0 0 auto;
+}
+.grid-2{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px;
+}
+table.data,table.mini-gantt{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12.5px;
+}
+table.data th,table.data td,
+table.mini-gantt th,table.mini-gantt td{
+  border:1px solid var(--line);
+  padding:9px 10px;
+  vertical-align:top;
+}
+table.data th,table.mini-gantt th{
+  background:var(--wine);
+  color:#fff;
+  text-align:left;
+}
+table.data tr:nth-child(even) td{background:#FCFAF9}
+table.mini-gantt td{text-align:center}
+table.mini-gantt td:first-child{
+  text-align:left;
+  font-weight:700;
+  color:#4B353A;
+  min-width:240px;
+}
+.daybar{
+  height:18px;
+  border-radius:4px;
+  background:linear-gradient(90deg,var(--wine),var(--brick));
+}
+.daybar.partial{width:50%;margin:auto}
+.daybar.future{
+  background:repeating-linear-gradient(135deg,#FFF8F0,#FFF8F0 7px,#F8E4CE 7px,#F8E4CE 14px);
+  border:1px dashed var(--orange);
+}
+.state{
+  display:inline-flex;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  background:#FFF6E8;
+  color:#7B4A0B;
+  border:1px solid #E9C99A;
+}
+.footer{
+  background:#fff;
+  border-top:1px solid var(--line);
+}
+.footer-strip{
+  height:10px;background:var(--grad);
+}
+.footer .inner{
+  max-width:1320px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:18px;
+  padding:24px;
+  color:#69615C;
+  font-size:12px;
+}
+.footer-logo{
+  font-family:Georgia,"Times New Roman",serif;
+  color:var(--wine);
+  font-size:20px;
+}
+.actions{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:40;
+  display:flex;
+  gap:8px;
+}
+.btn{
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+  padding:11px 15px;
+  font-weight:800;
+  background:var(--wine);
+  color:white;
+  box-shadow:0 8px 20px rgba(80,20,35,.17);
+}
+.btn.secondary{
+  background:white;
+  color:var(--wine);
+  border:1px solid var(--line);
+}
+@media(max-width:980px){
+  .hero-inner{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:repeat(3,1fr)}
+  .step:after{display:none}
+  .grid-2{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  h1{font-size:35px}
+  .navlinks{display:none}
+  .cards{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr}
+  .checklist{grid-template-columns:1fr}
+  .partner,.divider{display:none}
+}
+@media print{
+  header,.actions{display:none!important}
+  body{background:white}
+  section{box-shadow:none;break-inside:avoid}
+  .hero:before{display:none}
+  .gantt-wrap{overflow:visible}
+  .gantt{min-width:0;font-size:9px}
+  .brand-strip,.footer-strip,
+  .gantt .head,.bar,table.data th,table.mini-gantt th{
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+}
+
+.gantt-plan{
+  min-width:1280px;
+  display:grid;
+  grid-template-columns:255px 105px repeat(12,minmax(82px,1fr));
+  font-size:11px;
+}
+.gantt-plan>div{
+  min-height:48px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.gantt-plan .head{
+  background:var(--wine);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  padding:7px 5px;
+  text-align:center;
+}
+.gantt-plan .head.pre{
+  background:#6D625C;
+}
+.gantt-plan .activity{
+  background:#FBF8F6;
+  color:#3F3234;
+  font-weight:700;
+  padding:9px 11px;
+  display:flex;
+  align-items:center;
+}
+.gantt-plan .cell{
+  background:#fff;
+  position:relative;
+}
+.gantt-plan .precell{
+  background:#FAF8F6;
+}
+.wavebar{
+  height:26px;
+  margin:10px 4px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 6px;
+  text-align:center;
+  font-weight:800;
+  white-space:nowrap;
+}
+.wavebar.prep{
+  color:#4E4641;
+  background:#ECE8E5;
+  border:1px solid #D7CFCA;
+}
+.wavebar.oct{
+  color:#fff;
+  background:linear-gradient(90deg,var(--wine),var(--brick));
+}
+.wavebar.nov{
+  color:#fff;
+  background:linear-gradient(90deg,var(--brick),var(--burnt));
+}
+.wavebar.dec{
+  color:#fff;
+  background:linear-gradient(90deg,var(--burnt),var(--orange));
+}
+.wavebar.run{
+  color:#71461E;
+  background:#FFF5E9;
+  border:1px solid #EBCBA6;
+}
+.wavebar.close{
+  color:#fff;
+  background:linear-gradient(90deg,var(--wine-dark),var(--wine));
+}
+.gantt-caption{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:14px;
+}
+.gantt-caption .cap{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px 12px;
+  background:#FCFAF9;
+  font-size:12px;
+  color:#655B55;
+}
+.gantt-caption .cap b{color:var(--wine)}
+@media(max-width:980px){
+  .gantt-caption{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<div class="brand-strip"></div>
+
+<header>
+  <div class="nav">
+    <div class="logo-wrap">
+      <div class="fidu-logo">{fiduprevisora}</div>
+      <div class="divider"></div>
+      <div class="partner">ENTELGY COLOMBIA<br>RED HAT OPENSHIFT</div>
+    </div>
+    <nav class="navlinks">
+      <a href="#resumen">Resumen</a>
+      <a href="#gantt">Gantt</a>
+      <a href="#gate">Ready for Migration</a>
+      <a href="#app1">Aplicación 01</a>
+      <a href="#inventario">8 Aplicaciones</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="kicker">Plan maestro de migración · OpenShift</div>
+      <h1>Migración de aplicaciones web a Red Hat OpenShift</h1>
+      <p>Planificación por olas para organizar el assessment, alistamiento, ejecución, validación, paso a producción y estabilización de las <b>8 aplicaciones web</b> contempladas en el servicio.</p>
+    </div>
+    <aside class="hero-card">
+      <div class="label">Alcance de migración</div>
+      <div class="big">8 aplicaciones</div>
+      <hr/>
+      <div class="label">Primer plan técnico disponible</div>
+      <div style="font-size:24px;font-weight:800;color:#2a2a2a;margin:5px 0 6px">WordPress · 36 h</div>
+      <span class="status-pill">Plan de olas por formalizar con Fiduprevisora</span>
+    </aside>
+  </div>
+</div>
+
+<main>
+
+<section id="resumen">
+  <div class="section-title">
+    <div>
+      <h2>1. Resumen ejecutivo</h2>
+      <p>El Kickoff definió la migración de 8 aplicaciones web y estableció como salida el plan de olas, cronograma detallado, responsables, ventanas y criterios de aceptación. Para la ejecución se propone iniciar formalmente el <b>01 de octubre de 2026</b> y finalizar el <b>23 de diciembre de 2026</b>.</p>
+    </div>
+    <span class="tag">Base: Kickoff INVAB 012-2025</span>
+  </div>
+  <div class="cards">
+    <div class="card"><strong>8</strong><span>Aplicaciones web incluidas en el alcance de migración.</span></div>
+    <div class="card"><strong>01 Oct–23 Dic</strong><span>Ventana formal propuesta para la ejecución del plan de migración.</span></div>
+    <div class="card"><strong>36 h</strong><span>Estimación técnica disponible para un sitio WordPress.</span></div>
+    <div class="card"><strong>1 Gate</strong><span>“Ready for Migration” como prerrequisito previo al Día 1; no consume las 36 h técnicas.</span></div>
+  </div>
+  <div class="note"><b>Principio de control:</b> el esfuerzo individual de cada aplicación inicia únicamente cuando estén confirmados accesos, fuentes, dependencias, recursos, ambientes, ventana y criterios de aceptación. El Gate <b>Ready for Migration</b> ocurre antes del Día 1 y no consume las 36 horas técnicas. La distribución definitiva por olas se acuerda después del assessment.</div>
+</section>
+
+
+<section id="gantt">
+  <div class="section-title">
+    <div>
+      <h2>2. Gantt maestro de migración</h2>
+      <p>El <b>plan formal de migración inicia el 01 de octubre de 2026 y finaliza el 23 de diciembre de 2026</b>. Como actividad previa, entre el <b>24 y el 30 de septiembre</b> se ejecutarán en paralelo F0, F1, el assessment de las 8 aplicaciones y la priorización / definición de olas.</p>
+    </div>
+    <span class="tag">01 Oct – 23 Dic 2026</span>
+  </div>
+
+  <div class="note" style="margin-top:0;margin-bottom:18px">
+    <b>Modelo de ejecución:</b> las migraciones se realizarán en paralelo por ola: <b>3 aplicaciones en octubre</b>, <b>3 aplicaciones en noviembre</b> y <b>2 aplicaciones en diciembre</b>. Cada aplicación conserva su esfuerzo técnico individual estimado; la barra del Gantt representa la ventana de ejecución y coordinación de la ola, no horas continuas durante todo el periodo.
+  </div>
+
+  <div class="gantt-wrap">
+    <div class="gantt-plan">
+      <div class="head">Actividad / Frente</div>
+      <div class="head pre">24–30 Sep<br>Pre-plan</div>
+      <div class="head">01–09 Oct</div>
+      <div class="head">12–16 Oct</div>
+      <div class="head">19–23 Oct</div>
+      <div class="head">26–30 Oct</div>
+      <div class="head">02–06 Nov</div>
+      <div class="head">09–13 Nov</div>
+      <div class="head">16–20 Nov</div>
+      <div class="head">23–30 Nov</div>
+      <div class="head">01–07 Dic</div>
+      <div class="head">09–11 Dic</div>
+      <div class="head">14–18 Dic</div>
+      <div class="head">21–23 Dic</div>
+
+      <div class="activity">F0 · Alistamiento</div>
+      <div class="cell precell"><div class="wavebar prep">24–30 Sep</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">F1 · Baseline + estabilización</div>
+      <div class="cell precell"><div class="wavebar prep">24–30 Sep</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Assessment · 8 aplicaciones</div>
+      <div class="cell precell"><div class="wavebar prep">8 apps</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Priorización + definición de olas</div>
+      <div class="cell precell"><div class="wavebar prep">24–30 Sep</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Operación + gobierno de migración</div>
+      <div class="cell precell"></div>
+      <div class="cell"><div class="wavebar run">Inicio</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Seguimiento</div></div>
+      <div class="cell"><div class="wavebar run">Estabilización</div></div>
+      <div class="cell"></div>
+
+      <div class="activity">Ola Octubre · Aplicación 1</div>
+      <div class="cell precell"></div>
+      <div class="cell"><div class="wavebar oct">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Ola Octubre · Aplicación 2</div>
+      <div class="cell precell"></div>
+      <div class="cell"><div class="wavebar oct">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Ola Octubre · Aplicación 3</div>
+      <div class="cell precell"></div>
+      <div class="cell"><div class="wavebar oct">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Ola Noviembre · Aplicación 4</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="wavebar nov">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Ola Noviembre · Aplicación 5</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="wavebar nov">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Ola Noviembre · Aplicación 6</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="wavebar nov">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Ola Diciembre · Aplicación 7</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar dec">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Ola Diciembre · Aplicación 8</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar dec">36 h</div></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+      <div class="activity">Transferencia + cierre</div>
+      <div class="cell precell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"><div class="wavebar close">3 días hábiles</div></div>
+    </div>
+  </div>
+
+  <div class="gantt-caption">
+    <div class="cap"><b>Preparación previa:</b> 24–30 de septiembre. F0, F1, assessment de las 8 aplicaciones y priorización se ejecutan en paralelo antes del inicio formal.</div>
+    <div class="cap"><b>Olas paralelas:</b> 3 aplicaciones en octubre, 3 en noviembre y 2 en diciembre. Cada aplicación mantiene su plan técnico individual.</div>
+    <div class="cap"><b>Cierre:</b> 21–23 de diciembre. Se reservan exclusivamente los últimos 3 días hábiles para transferencia y cierre del plan.</div>
+  </div>
+</section>
+
+
+<section>
+  <div class="section-title">
+    <div>
+      <h2>3. Modelo de ejecución por aplicación</h2>
+      <p>Cada aplicación debe recorrer el mismo ciclo de control antes de considerarse migrada y aceptada.</p>
+    </div>
+  </div>
+  <div class="flow">
+    <div class="step"><b>Inventario</b><span>Dueño y contexto</span></div>
+    <div class="step"><b>Assessment</b><span>Arquitectura y dependencias</span></div>
+    <div class="step"><b>Priorizar</b><span>Criticidad y ola</span></div>
+    <div class="step"><b>Ready</b><span>Gate de entrada</span></div>
+    <div class="step"><b>Migrar</b><span>Ejecución técnica</span></div>
+    <div class="step"><b>Validar</b><span>QA + funcional</span></div>
+    <div class="step"><b>Producción</b><span>Go / No Go</span></div>
+    <div class="step"><b>Estabilizar</b><span>Logs y monitoreo</span></div>
+    <div class="step"><b>Aceptar</b><span>Cierre por aplicación</span></div>
+  </div>
+</section>
+
+<section id="gate">
+  <div class="section-title">
+    <div>
+      <h2>4. Gate “Ready for Migration”</h2>
+      <p>El objetivo es evitar que el esfuerzo técnico se consuma mientras existen dependencias o accesos pendientes.</p>
+    </div>
+    <span class="tag">Entrada obligatoria</span>
+  </div>
+  <div class="checklist">
+    <div class="check"><span class="box"></span>VPN / Bastión disponible</div>
+    <div class="check"><span class="box"></span>Acceso OpenShift habilitado</div>
+    <div class="check"><span class="box"></span>Código fuente disponible</div>
+    <div class="check"><span class="box"></span>Repositorio Git identificado</div>
+    <div class="check"><span class="box"></span>Dump / respaldo de BD disponible</div>
+    <div class="check"><span class="box"></span>Assets / uploads disponibles</div>
+    <div class="check"><span class="box"></span>Dependencias e integraciones identificadas</div>
+    <div class="check"><span class="box"></span>Certificados / DNS / routes definidos</div>
+    <div class="check"><span class="box"></span>CPU / RAM / Storage definidos</div>
+    <div class="check"><span class="box"></span>Ambientes Dev / QA / Prod confirmados</div>
+    <div class="check"><span class="box"></span>Ventana de cambio aprobada</div>
+    <div class="check"><span class="box"></span>Criterios de aceptación acordados</div>
+    <div class="check"><span class="box"></span>Responsable funcional confirmado</div>
+    <div class="check"><span class="box"></span>Plan de rollback validado</div>
+  </div>
+  <div class="note"><b>Regla propuesta:</b> si el Gate no está completo, la migración no inicia. El Gate <b>Ready for Migration</b> se completa antes del Día 1 y no se descuenta de las 36 horas. Una vez en estado Ready, comienza el esfuerzo técnico acordado para la aplicación.</div>
+</section>
+
+
+<section id="app1">
+  <div class="section-title">
+    <div>
+      <h2>5. Aplicación 01 · Sitio WordPress</h2>
+      <p>Esfuerzo técnico propuesto: <b>36 horas efectivas / 4,5 días laborables</b>. La redistribución prioriza QA, salida a producción y estabilización, manteniendo una bolsa máxima para remediaciones de compatibilidad PHP.</p>
+    </div>
+    <span class="tag">36 horas</span>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <table class="data">
+        <thead><tr><th>Actividad técnica</th><th>Horas</th></tr></thead>
+        <tbody>
+          <tr><td>Validación técnica final + backup / assets</td><td><b>4 h</b></td></tr>
+          <tr><td>Migración y validación de base de datos</td><td><b>5 h</b></td></tr>
+          <tr><td>Código, plugins, uploads y PVC</td><td><b>5 h</b></td></tr>
+          <tr><td>URLs, variables, secrets y permisos</td><td><b>4 h</b></td></tr>
+          <tr><td>Compatibilidad PHP / remediaciones</td><td><b>Hasta 8 h</b></td></tr>
+          <tr><td>QA técnico + pruebas funcionales</td><td><b>6 h</b></td></tr>
+          <tr><td>Cutover PROD + smoke test + rollback / hypercare inicial</td><td><b>4 h</b></td></tr>
+          <tr><td><b>Total máximo planificado</b></td><td><b>36 h</b></td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        <b>Tratamiento de compatibilidad:</b> las 8 horas corresponden a una <b>bolsa máxima de remediación</b> sujeta a los hallazgos del assessment y de las pruebas. Si no se requiere su consumo total, el esfuerzo real se reportará según ejecución.
+      </div>
+    </div>
+
+    <div>
+      <table class="mini-gantt">
+        <thead><tr><th>Distribución orientativa</th><th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th></tr></thead>
+        <tbody>
+          <tr><td>Validación técnica final + backup</td><td><div class="daybar"></div></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Migración / validación BD</td><td><div class="daybar"></div></td><td><div class="daybar partial"></div></td><td></td><td></td><td></td></tr>
+          <tr><td>Código + plugins + uploads + PVC</td><td></td><td><div class="daybar"></div></td><td></td><td></td><td></td></tr>
+          <tr><td>URLs + variables + secrets + permisos</td><td></td><td><div class="daybar partial"></div></td><td><div class="daybar partial"></div></td><td></td><td></td></tr>
+          <tr><td>Compatibilidad PHP / remediaciones</td><td></td><td></td><td><div class="daybar"></div></td><td><div class="daybar partial"></div></td><td></td></tr>
+          <tr><td>QA técnico + pruebas funcionales</td><td></td><td></td><td></td><td><div class="daybar"></div></td><td></td></tr>
+          <tr><td>Cutover PROD + smoke + hypercare inicial</td><td></td><td></td><td></td><td></td><td><div class="daybar partial"></div></td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        <b>Secuencia orientativa:</b> Día 1 = 4 h backup + 4 h BD; Día 2 = 1 h BD + 5 h código/PVC + 2 h configuración; Día 3 = 2 h configuración + 6 h compatibilidad; Día 4 = 2 h compatibilidad + 6 h QA; Día 5 = 4 h de cutover, smoke test e hypercare inicial.
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:18px">
+    <b>Ready for Migration no forma parte de las 36 h:</b> VPN, accesos, repositorio, dump de BD, assets, dependencias, ambientes, ventana, responsable funcional y criterios de aceptación deben estar confirmados antes de iniciar el Día 1.
+  </div>
+</section>
+
+
+<section id="inventario">
+  <div class="section-title">
+    <div>
+      <h2>6. Matriz maestra de las 8 aplicaciones</h2>
+      <p>La matriz se completa con Fiduprevisora durante el assessment. No se asignan nombres, complejidades ni esfuerzos sin validación.</p>
+    </div>
+    <span class="tag">Control de alcance</span>
+  </div>
+  <div style="overflow:auto">
+    <table class="data">
+      <thead>
+        <tr>
+          <th>#</th><th>Aplicación</th><th>Tecnología</th><th>Criticidad</th><th>Dependencias</th>
+          <th>Complejidad</th><th>Esfuerzo</th><th>Ola</th><th>Ventana</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><b>Sitio WordPress*</b></td><td>WordPress / PHP / MySQL</td><td>Por definir</td><td>BD / Plugins / PVC / DNS / certificados</td><td>Por validar</td><td><b>36 h máx. plan.</b></td><td>Por definir</td><td>Por definir</td><td><span class="state">Assessment</span></td></tr>
+        <tr><td>2</td><td>Aplicación 2</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>3</td><td>Aplicación 3</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>4</td><td>Aplicación 4</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>5</td><td>Aplicación 5</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>6</td><td>Aplicación 6</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>7</td><td>Aplicación 7</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
+        <tr><td>8</td><td>Aplicación 8</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td>Pendiente</td><td><span class="state">Inventario</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">* El sitio WordPress se presenta como <b>candidato</b> para la primera migración porque ya existe una estimación técnica. La conformación de la Ola 1 debe confirmarse con Fiduprevisora.</div>
+</section>
+
+<section>
+  <div class="section-title">
+    <div>
+      <h2>7. Acuerdos requeridos con Fiduprevisora</h2>
+      <p>Decisiones necesarias para convertir este plan maestro en un cronograma comprometido.</p>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card"><strong>01</strong><span>Confirmar inventario y dueños funcionales/técnicos de las 8 aplicaciones.</span></div>
+    <div class="card"><strong>02</strong><span>Definir criticidad, dependencias y ventanas de despliegue.</span></div>
+    <div class="card"><strong>03</strong><span>Acordar criterios de aceptación y responsables de Go/No Go.</span></div>
+    <div class="card"><strong>04</strong><span>Formalizar la priorización y el cronograma definitivo de olas.</span></div>
+  </div>
+</section>
+
+</main>
+
+<div class="actions">
+  <button class="btn secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Inicio</button>
+  <button class="btn" onclick="window.print()">Imprimir / PDF</button>
+</div>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <div class="footer-logo">{fiduprevisora}</div>
+      <div>Plan Maestro de Migración a Red Hat OpenShift</div>
+    </div>
+    <div>Entelgy Colombia · Servicio de administración, soporte y migración OpenShift</div>
+  </div>
+  <div class="footer-strip"></div>
+</footer>
+</body>
+</html>
